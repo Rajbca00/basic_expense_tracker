@@ -41,26 +41,30 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(_groupTransactionValues);
-    return Card(
-      margin: EdgeInsets.all(20),
-      elevation: 6,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: _groupTransactionValues
-                .map((data) => Flexible(
-                      fit: FlexFit.loose,
-                      child: ChartBar(
-                        label: data['day'].toString(),
-                        spendingAmount: double.parse(data['amount'].toString()),
-                        spendingPctOfTotal: totalSpending == 0.0
-                            ? 0
-                            : double.parse(data['amount'].toString()) /
-                                totalSpending,
-                      ),
-                    ))
-                .toList()),
+    return Container(
+      // height: MediaQuery.of(context).size.height * 0.2,
+      child: Card(
+        margin: EdgeInsets.all(20),
+        elevation: 6,
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _groupTransactionValues
+                  .map((data) => Flexible(
+                        fit: FlexFit.loose,
+                        child: ChartBar(
+                          label: data['day'].toString(),
+                          spendingAmount:
+                              double.parse(data['amount'].toString()),
+                          spendingPctOfTotal: totalSpending == 0.0
+                              ? 0
+                              : double.parse(data['amount'].toString()) /
+                                  totalSpending,
+                        ),
+                      ))
+                  .toList()),
+        ),
       ),
     );
   }

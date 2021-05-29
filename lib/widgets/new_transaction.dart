@@ -18,57 +18,64 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Container(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TextField(
-            controller: titleController,
-            onSubmitted: (_) => _submitData(),
-            decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                // hintText: 'Enter the Title',
-                labelText: 'Title'),
-          ),
-          TextField(
-            controller: amountController,
-            keyboardType: TextInputType.number,
-            onSubmitted: (_) => _submitData(),
-            decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                // hintText: 'Enter the Amount',
-                labelText: 'Amount'),
-          ),
-          Container(
-            height: 70,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(date == null
-                      ? 'No Date Chosen!'
-                      : 'Picked Date: ${DateFormat.yMd().format(date!)}'),
-                ),
-                TextButton(
-                  onPressed: () => _presentDatePicker(context),
-                  child: Text(
-                    'Choose Date',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+    return SingleChildScrollView(
+      child: Card(
+          child: Container(
+        padding: EdgeInsets.only(
+          top: 10,
+          left: 10,
+          right: 10,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 40,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            TextField(
+              controller: titleController,
+              onSubmitted: (_) => _submitData(),
+              decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  // hintText: 'Enter the Title',
+                  labelText: 'Title'),
+            ),
+            TextField(
+              controller: amountController,
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => _submitData(),
+              decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  // hintText: 'Enter the Amount',
+                  labelText: 'Amount'),
+            ),
+            Container(
+              height: 70,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(date == null
+                        ? 'No Date Chosen!'
+                        : 'Picked Date: ${DateFormat.yMd().format(date!)}'),
                   ),
-                )
-              ],
+                  TextButton(
+                    onPressed: () => _presentDatePicker(context),
+                    child: Text(
+                      'Choose Date',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: _submitData,
-            child: Text(
-              'Add Transaction',
-            ),
-          )
-        ],
-      ),
-    ));
+            ElevatedButton(
+              onPressed: _submitData,
+              child: Text(
+                'Add Transaction',
+              ),
+            )
+          ],
+        ),
+      )),
+    );
   }
 
   void _presentDatePicker(BuildContext ctx) async {

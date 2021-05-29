@@ -2,10 +2,16 @@ import 'package:basic_expense_planner/widgets/chart.dart';
 import 'package:basic_expense_planner/widgets/new_transaction.dart';
 import 'package:basic_expense_planner/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'models/transaction.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
   runApp(MyApp());
 }
 
@@ -46,6 +52,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _showChart = false;
+
   void showAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
         context: ctx,
@@ -102,25 +110,62 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
+  void _toggleShowChart(bool val) {
+    setState(() {
+      _showChart = val;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Personal Expenses',
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => showAddNewTransaction(context),
-            icon: Icon(Icons.add),
-          ),
-        ],
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final appBar = AppBar(
+      title: Text(
+        'Personal Expenses',
       ),
+      actions: [
+        IconButton(
+          onPressed: () => showAddNewTransaction(context),
+          icon: Icon(Icons.add),
+        ),
+      ],
+    );
+    final txListWidget = Container(
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
+      child: TransactionList(transactions, _deleteTransaction),
+    );
+
+    final txChart = Container(
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          (isLandscape ? 0.7 : 0.3),
+      child: Chart(_recentTransactions),
+    );
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(transactions, _deleteTransaction),
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Show Chart'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: _toggleShowChart,
+                  )
+                ],
+              ),
+            if (!isLandscape) txChart, if (!isLandscape) txListWidget,
+            if (isLandscape) _showChart ? txChart : txListWidget,
             // NewTransaction(_addTransaction)
           ],
         ),

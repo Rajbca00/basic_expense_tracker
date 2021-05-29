@@ -11,7 +11,7 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      // height: MediaQuery.of(context).size.height * 0.6,
       child: (transactions.length == 0)
           ? Image.asset('./assets/images/nodata.png')
           : ListView.builder(
@@ -38,12 +38,26 @@ class TransactionList extends StatelessWidget {
                             .format(transactions[index].date)
                             .toString(),
                       ),
-                      trailing: IconButton(
-                        onPressed: () =>
-                            {_deleteTransaction(transactions[index].id)},
-                        icon: Icon(Icons.delete),
-                        color: Theme.of(context).errorColor,
-                      ),
+                      trailing: MediaQuery.of(context).size.width > 420
+                          ? TextButton.icon(
+                              onPressed: () =>
+                                  {_deleteTransaction(transactions[index].id)},
+                              icon: Icon(Icons.delete),
+
+                              // color: Theme.of(context).errorColor,
+                              label: Text(
+                                'Delete',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            )
+                          : IconButton(
+                              onPressed: () =>
+                                  {_deleteTransaction(transactions[index].id)},
+                              icon: Icon(Icons.delete),
+                              color: Theme.of(context).errorColor,
+                            ),
                     ),
                   )),
     );
